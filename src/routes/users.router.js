@@ -8,31 +8,36 @@ dotenv.config();
 
 const router = express.Router();
 
-/** 사용자 회원가입 API */
-router.post('/sign-up', async (req, res, next) => {
-  const { accountId, password, name } = req.body;
-  const isExistUser = await userPrisma.users.findFirst({
-    where: {
-      accountId,
-    },
-  });
+/** 사용자 회원가입 API **/
+router.post("/sign-up", async (req, res, next) => {
+  try {
+    const { accountId, password, name } = req.body;
+    const isExistUser = await userPrisma.users.findFirst({
+      where: { accountId },
+    });
+    if (isExistUser) {
+      console.log(isExistUser.accountId);
+      return res
+        .status(409)
+        .json({ errorMessage: "이미 존재하는 아이디입니다." });
+    }
 
-  if (isExistUser) {
-    return res.status(409).json({ message: '이미 존재하는 아이디입니다.' });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await userPrisma.users.create({
+      data: {
+        accountId,
+        password: hashedPassword,
+        name,
+      },
+    });
+
+    return res
+      .status(201)
+      .json({ message: "회원가입이 완료되었습니다.", user });
+  } catch (err) {
+    next(err);
   }
-
-  // 사용자 비밀번호를 암호화합니다.
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Users 테이블에 사용자를 추가합니다.
-  await userPrisma.users.create({
-    data: {
-      accountId,
-      password: hashedPassword, // 암호화된 비밀번호를 저장합니다.
-    },
-  });
-
-  return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
 });
 
 /** 로그인 API **/
