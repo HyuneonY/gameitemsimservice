@@ -88,11 +88,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.ItemsScalarFieldEnum = {
-  itemId: 'itemId',
-  itemName: 'itemName',
-  itemStat: 'itemStat',
-  itemPrice: 'itemPrice'
+exports.Prisma.ItemScalarFieldEnum = {
+  id: 'id',
+  item_code: 'item_code',
+  item_name: 'item_name',
+  health: 'health',
+  power: 'power',
+  item_price: 'item_price'
 };
 
 exports.Prisma.SortOrder = {
@@ -100,19 +102,9 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
 
 exports.Prisma.ModelName = {
-  Items: 'Items'
+  Item: 'Item'
 };
 /**
  * Create the Client
@@ -125,7 +117,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\양현언\\Documents\\Project\\gameItemSimService\\prisma\\generated\\client2",
+      "value": "C:\\Users\\양현언\\Documents\\Project\\gameItemSimService\\prisma\\game\\generated\\gameDataClient",
       "fromEnvVar": null
     },
     "config": {
@@ -142,26 +134,25 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
   "clientVersion": "5.14.0",
   "engineVersion": "e9771e62de70f79a5e1c604a2d7c8e2a0a874b48",
   "datasourceNames": [
-    "db"
+    "gamedb"
   ],
   "activeProvider": "mysql",
   "inlineDatasources": {
-    "db": {
+    "gamedb": {
       "url": {
-        "fromEnvVar": "DATABASE_URL2",
+        "fromEnvVar": "DATABASE_URL1",
         "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client2\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL2\")\n}\n\nmodel Items {\n  itemId    Int    @id @default(autoincrement()) @map(\"itemId\")\n  itemName  String @map(\"itemName\")\n  itemStat  Json   @map(\"itemStat\")\n  itemPrice Int    @map(\"itemPrice\")\n\n  @@map(\"Items\")\n}\n",
-  "inlineSchemaHash": "ebfeb21d4d5ed16d12e3fd0bd34b7fb146e3aca5f344e004191d4a9674b5adbf",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/gameDataClient\"\n}\n\ndatasource gamedb {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL1\")\n}\n\nmodel Item {\n  id         Int    @id @default(autoincrement())\n  item_code  Int    @unique\n  item_name  String\n  health     Int\n  power      Int\n  item_price Int\n\n  @@map(\"items\")\n}\n",
+  "inlineSchemaHash": "86cfd86dc41f683878be0fe99d403a305dceaf3a5ca2d149ca011cd7e8cf42a9",
   "copyEngine": true
 }
 
@@ -170,8 +161,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
-    "prisma/generated/client2",
-    "generated/client2",
+    "generated/gameDataClient",
+    "gameDataClient",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -182,7 +173,7 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   config.isBundled = true
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Items\":{\"dbName\":\"Items\",\"fields\":[{\"name\":\"itemId\",\"dbName\":\"itemId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"itemName\",\"dbName\":\"itemName\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"itemStat\",\"dbName\":\"itemStat\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Json\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"itemPrice\",\"dbName\":\"itemPrice\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Item\":{\"dbName\":\"items\",\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"item_code\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"item_name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"health\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"power\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"item_price\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
 
@@ -200,7 +191,7 @@ Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "prisma/generated/client2/query_engine-windows.dll.node")
+path.join(process.cwd(), "generated/gameDataClient/query_engine-windows.dll.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "prisma/generated/client2/schema.prisma")
+path.join(process.cwd(), "generated/gameDataClient/schema.prisma")
